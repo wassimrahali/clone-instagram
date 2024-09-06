@@ -1,6 +1,6 @@
 export type INewUser = {
   username: string ;
-  id: number;
+  id?: number;
   name: string;
   email: string;
   password: string;
