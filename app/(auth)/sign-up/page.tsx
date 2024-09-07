@@ -2,8 +2,7 @@
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { useToast } from "../hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import {
   Form,
@@ -16,24 +15,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
 import { SignupValidation } from "@/lib/validation";
-import {
-  useCreateUserAccount,
-  useSignInAccount,
-} from "@/lib/react-query/queriesAndMutations";
+import { useCreateUserAccount } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { createUserAccount, signInAccount } from "@/lib/appwrite/api";
 
 const SignupForm = () => {
   const router = useRouter();
-  const { checkAuthUser } = useUserContext();
+
+  const { checkAuthUser,isLoading:isCreatingAccount } = useUserContext();
   const { toast } = useToast();
-  const { mutateAsync: createUserAccount, isLoading: isCreatingAccount } =
-    useCreateUserAccount();
-  const { mutateAsync: signInAccount, isLoading: isSigningIn } =
-    useSignInAccount();
-  
+
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
     defaultValues: {
@@ -157,7 +150,11 @@ const SignupForm = () => {
                 <FormItem>
                   <FormLabel className="shad-form_label">Password</FormLabel>
                   <FormControl>
-                    <Input type="password" className="shad-input" {...field} />
+                    <Input
+                      type="password"
+                      className="shad-input"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -168,11 +165,11 @@ const SignupForm = () => {
               {isCreatingAccount ? <div>Loading ...</div> : "Signup"}
             </Button>
 
-            <p className="text-small-regular text-light-2 text-center mt-2">
+            <p className="text-sm text-light-2 text-center mt-2">
               Already have an account?
               <Link
                 href="/sign-in"
-                className="text-red-400 text-small-semibold ml-1"
+                className="text-red-400 font-semibold ml-1"
               >
                 Log in
               </Link>

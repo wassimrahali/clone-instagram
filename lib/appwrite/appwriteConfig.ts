@@ -14,10 +14,11 @@ export const appwriteConfig = {
 };
 
 const client = new Client();
-client.setEndpoint(appwriteConfig.appwrite.endpoint);
-client.setProject(appwriteConfig.appwrite.projectId);
+client
+      .setEndpoint(appwriteConfig.appwrite.endpoint)
+      .setProject(appwriteConfig.appwrite.projectId);
 
-
+export default client;
 export const account = new Account(client);
 export const databases = new Databases(client);
 export const storage = new Storage(client);

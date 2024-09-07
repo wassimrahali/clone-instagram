@@ -51,7 +51,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return true;
     } catch (error) {
       console.log(error);
-      return false; //user not authenticated
+      return false; 
     } finally {
       setIsLoading(false);
     }
@@ -59,7 +59,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const cookieFallBack = localStorage.getItem('cookieFallBack');
-    if (cookieFallBack === '[]') {
+    if (cookieFallBack === '[]'|| cookieFallBack===null) {
       router.push('/sign-in'); 
       checkAuthUser();
     }
