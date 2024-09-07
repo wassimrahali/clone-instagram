@@ -18,10 +18,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
 
-        {/* <AuthProvider>{children}</AuthProvider> */}
 
         <QueryProvider> 
-        {children}
+        <AuthProvider>{children}</AuthProvider>
         </QueryProvider>
 
       </body>

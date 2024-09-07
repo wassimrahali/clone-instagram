@@ -11,10 +11,10 @@
 //         />
 //         <h2 className="text-lg font-semibold">Username</h2>
 
-//         <li className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer rounded-lg">
+//         <lipsi className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer rounded-lg">
 //           <UserIcon className="text-gray-600 text-xl mr-3" />
 //           <span className="text-gray-700">Profile</span>
-//         </li>
+//         </lipsi>
 //     </div>
 //   )
 // }
@@ -174,6 +174,7 @@ export default () => {
         setDrapdownState({ isActive: false, idx: null });
     };
   }, []);
+  
 
   return (
     <>

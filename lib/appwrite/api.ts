@@ -110,3 +110,42 @@ export async function getCurrentUser() {
 }
 
 
+// Function to check if there is an active session
+export const checkActiveSession = async (): Promise<boolean> => {
+  try {
+    const session = await account.getSession('current'); // Get the current session
+    return session !== null; // Return true if there is an active session
+  } catch (error: unknown) {
+    if (error instanceof Error && (error as any).code === 401) {
+      return false; // No active session
+    }
+    // Log and re-throw other unexpected errors
+    console.error('Error checking session:', error);
+    throw error;
+  }
+};
+
+// Function to delete all sessions for the current user
+export const deleteSessions = async (): Promise<void> => {
+  try {
+    // Get the list of all sessions
+    const sessions = await account.listSessions();
+
+    if (!sessions.sessions || sessions.sessions.length === 0) {
+      console.log('No sessions to delete.');
+      return;
+    }
+
+    // Delete each session
+    await Promise.all(
+      sessions.sessions.map(async (session) => {
+        await account.deleteSession(session.$id);
+      })
+    );
+
+    console.log('All sessions deleted successfully');
+  } catch (error: unknown) {
+    console.error('Error deleting sessions:', error);
+    throw error; // Re-throw the error for further handling
+  }
+};
