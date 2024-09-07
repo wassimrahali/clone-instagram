@@ -1,14 +1,17 @@
 // import SigninForm from "@/components/SigninForm";
 import { Toaster } from "@/components/ui/toaster"
-
+import SideBar from '../components/SideBar'
+import TopBar from "@/components/TopBar";
+import BottomBar from "@/components/BottomBar";
 
 export default function Home() {
   return (
     <div>
-      <h1>Hello my friend !</h1>
+      <SideBar />
+      <TopBar />
+      <BottomBar />
       <Toaster />
 
-      {/* <SigninForm /> */}
     </div>
   );
 }

@@ -42,7 +42,7 @@ const SignupForm = () => {
   const handleSignup = async (user: z.infer<typeof SignupValidation>) => {
       const newUser = await createUserAccount(user);
 
-      if (!newUser) {
+      if (newUser) {
         toast({
           title: "Signup Error"
         });
