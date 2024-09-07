@@ -11,7 +11,7 @@ const SideBar = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.push("/");
+      router.push("/sign-up");
     }
   }, [isSuccess]);
 
