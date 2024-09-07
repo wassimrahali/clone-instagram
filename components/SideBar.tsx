@@ -3,7 +3,7 @@ import { HomeIcon, LogOut, SearchIcon, UserIcon } from "lucide-react";
 import React, { useEffect } from "react";
 import { useSignOutAccount } from "@/lib/react-query/queriesAndMutations";
 import { Button } from "./ui/button";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const SideBar = () => {
   const { mutateAsync: signOut, isSuccess } = useSignOutAccount();
