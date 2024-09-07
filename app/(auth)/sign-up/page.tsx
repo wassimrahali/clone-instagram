@@ -25,6 +25,8 @@ const SignupForm = () => {
   const router = useRouter();
 
   const { checkAuthUser,isLoading:isCreatingAccount } = useUserContext();
+  const { mutateAsync: createUserAccount, isPending } = useCreateUserAccount();
+
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof SignupValidation>>({
@@ -38,14 +40,11 @@ const SignupForm = () => {
   });
 
   const handleSignup = async (user: z.infer<typeof SignupValidation>) => {
-    try {
       const newUser = await createUserAccount(user);
 
       if (!newUser) {
         toast({
-          title: "Signup Error",
-          description: "An error occurred while creating your account.",
-          action: <ToastAction altText="Retry">Retry</ToastAction>,
+          title: "Signup Error"
         });
         return;
       }
@@ -57,9 +56,7 @@ const SignupForm = () => {
 
       if (!session) {
         toast({
-          title: "Signin Error",
-          description: "Unable to sign in. Please check your credentials.",
-          action: <ToastAction altText="Retry">Retry</ToastAction>,
+          title: "Signin Error"
         });
         return;
       }
@@ -71,17 +68,9 @@ const SignupForm = () => {
       } else {
         toast({
           title: "Signin Failed",
-          description: "Unable to sign in. Please try again later.",
-          action: <ToastAction altText="Retry">Retry</ToastAction>,
         });
       }
-    } catch (error) {
-      toast({
-        title: "Signup Failed",
-        description: "Unable to create your account. Please try again later.",
-        action: <ToastAction altText="Retry">Retry</ToastAction>,
-      });
-    }
+   
   };
 
   return (
@@ -162,8 +151,11 @@ const SignupForm = () => {
             />
 
             <Button type="submit" className="bg-purple-800">
-              {isCreatingAccount ? <div>Loading ...</div> : "Signup"}
-            </Button>
+            {isPending || isCreatingAccount ? (
+                <div className="flex-center gap-2">Loading...</div>
+              ) : (
+                "Log in"
+              )}            </Button>
 
             <p className="text-sm text-light-2 text-center mt-2">
               Already have an account?
