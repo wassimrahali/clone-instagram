@@ -32,39 +32,44 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  async function checkAuthUser() {
+  const checkAuthUser = async () => {
+    setIsLoading(true);
     try {
-      const { $id, name, email, username, bio, imageUrl } =
-        await getCurrentUser();
-
-      if (!$id) {
+      const currentAccount = await getCurrentUser();
+      if (currentAccount) {
         setUser({
-          id: $id,
-          name,
-          email,
-          username,
-          bio,
-          imageUrl,
+          id: currentAccount.$id,
+          name: currentAccount.name,
+          username: currentAccount.username,
+          email: currentAccount.email,
+          imageUrl: currentAccount.imageUrl,
+          bio: currentAccount.bio,
         });
+        setIsAuthenticated(true);
+
+        return true;
       }
-      setIsAuthenticated(true);
-      return true;
+
+      return false;
     } catch (error) {
-      console.log(error);
-      return false; 
+      console.error(error);
+      return false;
     } finally {
       setIsLoading(false);
     }
-  }
-
+  };
+  
   useEffect(() => {
-    const cookieFallBack = localStorage.getItem('cookieFallBack');
-    if (cookieFallBack === '[]'|| cookieFallBack===null) {
-      router.push('/sign-in'); 
-      checkAuthUser();
-    }
-  }, []);
-
+    const checkUser = async () => {
+      const isAuthenticated = await checkAuthUser();
+      if (!isAuthenticated) {
+        router.push('/sign-in');
+      }
+    };
+  
+    checkUser();
+  }, [router]);
+  
 
   const value = {
     user,

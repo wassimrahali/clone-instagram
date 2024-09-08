@@ -1,10 +1,17 @@
 "use client";
-
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { ToastAction } from "@/components/ui/toast";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -12,12 +19,14 @@ import { SignupValidation } from "@/lib/validation";
 import { useCreateUserAccount } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { signInAccount, signOutAccount } from "@/lib/appwrite/api"; // Make sure signOutAccount is imported
+import { createUserAccount, signInAccount } from "@/lib/appwrite/api";
 
 const SignupForm = () => {
   const router = useRouter();
-  const { checkAuthUser, isLoading: isCreatingAccount } = useUserContext();
+
+  const { checkAuthUser,isLoading:isCreatingAccount } = useUserContext();
   const { mutateAsync: createUserAccount, isPending } = useCreateUserAccount();
+
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof SignupValidation>>({
@@ -31,31 +40,27 @@ const SignupForm = () => {
   });
 
   const handleSignup = async (user: z.infer<typeof SignupValidation>) => {
-    try {
-      // Check if there's an active session and sign out if necessary
-      const currentUser = await checkAuthUser();
-      if (currentUser) {
-        await signOutAccount(); // Sign out existing session
-      }
-
-      // Create a new user account
       const newUser = await createUserAccount(user);
 
-      if (!newUser) {
-        throw new Error("Failed to create user account");
+      if (newUser) {
+        toast({
+          title: "Signup Error"
+        });
+        return;
       }
 
-      // Sign in the new user
       const session = await signInAccount({
         email: user.email,
         password: user.password,
       });
 
       if (!session) {
-        throw new Error("Signin failed");
+        toast({
+          title: "Signin Error"
+        });
+        return;
       }
 
-      // Check if user is authenticated
       const isLoggedIn = await checkAuthUser();
       if (isLoggedIn) {
         form.reset();
@@ -63,16 +68,9 @@ const SignupForm = () => {
       } else {
         toast({
           title: "Signin Failed",
-          description: "Please check your credentials and try again.",
         });
       }
-    } catch (error: any) {
-      console.error("Signup error:", error);
-      toast({
-        title: "Signup Error",
-        description: error.message || "An unexpected error occurred. Please try again.",
-      });
-    }
+   
   };
 
   return (
@@ -80,8 +78,14 @@ const SignupForm = () => {
       <Form {...form}>
         <div className="sm:w-420 flex-center flex-col">
           <img src="/assets/images/logo.svg" alt="logo" />
-          <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">Create a new account</h2>
-          <p className="text-light-3 small-medium md:base-regular mt-2">To use snapgram, please enter your details</p>
+
+          <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
+            Create a new account
+          </h2>
+          <p className="text-light-3 small-medium md:base-regular mt-2">
+            To use snapgram, please enter your details
+          </p>
+
           <form
             onSubmit={form.handleSubmit(handleSignup)}
             className="flex flex-col gap-5 w-full mt-4"
@@ -121,7 +125,7 @@ const SignupForm = () => {
                 <FormItem>
                   <FormLabel className="shad-form_label">Email</FormLabel>
                   <FormControl>
-                    <Input type="email" className="shad-input" {...field} />
+                    <Input type="text" className="shad-input" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -135,20 +139,30 @@ const SignupForm = () => {
                 <FormItem>
                   <FormLabel className="shad-form_label">Password</FormLabel>
                   <FormControl>
-                    <Input type="password" className="shad-input" {...field} />
+                    <Input
+                      type="password"
+                      className="shad-input"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <Button type="submit" className="bg-purple-800" disabled={isPending || isCreatingAccount}>
-              {isPending || isCreatingAccount ? <div className="flex-center gap-2">Loading...</div> : "Sign Up"}
-            </Button>
+            <Button type="submit" className="bg-purple-800">
+            {isPending || isCreatingAccount ? (
+                <div className="flex-center gap-2">Loading...</div>
+              ) : (
+                "Log in"
+              )}            </Button>
 
             <p className="text-sm text-light-2 text-center mt-2">
               Already have an account?
-              <Link href="/sign-in" className="text-red-400 font-semibold ml-1">
+              <Link
+                href="/sign-in"
+                className="text-red-400 font-semibold ml-1"
+              >
                 Log in
               </Link>
             </p>

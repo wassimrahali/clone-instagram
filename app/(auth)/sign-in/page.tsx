@@ -42,6 +42,7 @@ const SignInForm = () => {
         password: user.password,
       });
 
+      
       if (!session) {
         toast({ title: "Login failed. Please try again." });
         return;
