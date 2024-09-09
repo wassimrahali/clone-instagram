@@ -1,5 +1,5 @@
 import { usePathname } from 'next/navigation';
-import { Bell, Bookmark, Briefcase, Home, Settings, User, Users } from 'lucide-react';
+import { Bell, Bookmark, Briefcase, Home, ImagePlusIcon, Podcast, Settings, User, Users } from 'lucide-react';
 
 export const NavItems = () => {
   const pathname = usePathname();
@@ -11,7 +11,7 @@ export const NavItems = () => {
   return [
     {
       name: 'Home',
-      href: '/',
+      href: '/home',
       icon: <Home size={20} />,
       active: isNavItemActive(pathname, '/'),
       position: 'top',
@@ -19,7 +19,7 @@ export const NavItems = () => {
     {
       name: 'Create Post',
       href: '/create-post',
-      icon: <Home size={20} />, // Replace with an appropriate icon for creating a post
+      icon: <ImagePlusIcon size={20} />, // Replace with an appropriate icon for creating a post
       active: isNavItemActive(pathname, '/create-post'),
       position: 'top',
     },

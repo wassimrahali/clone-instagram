@@ -1,6 +1,6 @@
 export const sidebarLinks = [
     {
-      imgURL: "/",
+      imgURL: "/home",
       route: "/",
       label: "Home",
     },
@@ -28,7 +28,7 @@ export const sidebarLinks = [
   
   export const bottombarLinks = [
     {
-      imgURL: "/public/assets/icons/home.svg",
+      imgURL: "/public/assets/icons/homep.svg",
       route: "/",
       label: "Home",
     },

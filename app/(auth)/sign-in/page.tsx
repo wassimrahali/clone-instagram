@@ -16,8 +16,8 @@ import { checkActiveSession, deleteSessions } from "@/lib/appwrite/api"; // Ensu
 
 const SignInForm = () => {
   const router = useRouter();
-  const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
-  const { mutateAsync: signInAccount, isPending } = useSignInAccount();
+  const { checkAuthUser } = useUserContext();
+  const { mutateAsync: signInAccount } = useSignInAccount();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof SignInValidation>>({
@@ -42,7 +42,6 @@ const SignInForm = () => {
         password: user.password,
       });
 
-      
       if (!session) {
         toast({ title: "Login failed. Please try again." });
         return;
@@ -51,7 +50,7 @@ const SignInForm = () => {
       const isLoggedIn = await checkAuthUser();
       if (isLoggedIn) {
         form.reset();
-        router.push("/"); // Redirect to home page on successful login
+        router.push("/home"); // Redirect to home page on successful login
       } else {
         toast({ title: "Signin Failed" });
       }
@@ -98,9 +97,7 @@ const SignInForm = () => {
               )}
             />
 
-            <Button type="submit" className="shad-button_primary" disabled={isPending || isUserLoading}>
-              {isPending || isUserLoading ? <div className="flex-center gap-2">Loading...</div> : "Log in"}
-            </Button>
+            <Button type="submit" className="shad-button_primary">Log in</Button>
 
             <p className="text-small-regular text-light-2 text-center mt-2">
               I don't have an account!

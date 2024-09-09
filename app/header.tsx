@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Link from 'next/link';
 
@@ -16,14 +16,28 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { NavItems } from '@/config';
-import { Menu } from 'lucide-react';
+import { Instagram, InstagramIcon, Menu, User } from 'lucide-react';
 import BottomBar from '@/components/shared/BottomBar';
+import { useUserContext } from '@/context/AuthContext';
+import { useSignOutAccount } from '@/lib/react-query/queriesAndMutations';
+import { useRouter } from 'next/navigation';
+
 
 export default function Header() {
+  const { user, setUser, setIsAuthenticated, isLoading } = useUserContext();
+  const router = useRouter();
   const navItems = NavItems();
   const [isOpen, setIsOpen] = useState(false);
+  const { mutateAsync: signOut, isSuccess } = useSignOutAccount();
+  useEffect(() => {
+    if (isSuccess) {
+      router.push("/sign-up");
+    }
+  }, [isSuccess, router]);
+
 
   return (
+    
  
     <div>
          <header className="flex items-center h-16 px-4 border-b shrink-0 md:px-6 justify-between">
@@ -33,8 +47,9 @@ export default function Header() {
         className="flex items-center gap-2 text-lg font-semibold md:text-base"
         prefetch={false}
       >
-        <span className="w-8 h-8 border bg-accent rounded-full" />
-        <span>Acme Inc</span>
+<span className='flex  items-center space-x-4'>
+<InstagramIcon /><span>Instagram</span>
+</span>
       </Link>
 
       <div className="ml-4 flex items-center gap-3">
@@ -47,10 +62,10 @@ export default function Header() {
             >
               <Avatar>
                 <AvatarImage
-                  src="https://github.com/shadcn.png"
+                  src={user.imageUrl}
                   alt="@shadcn"
                 />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback><User /></AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
@@ -60,7 +75,7 @@ export default function Header() {
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuItem>Support</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Logout</DropdownMenuItem>
+            <DropdownMenuItem className='cursor-pointer hover:text-red-600' onClick={() => signOut()} >Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 

@@ -47,14 +47,14 @@ export default function SideNav() {
     <div className="pr-4 hidden md:block w-64 h-screen ">
       <div
         className={cn(
-          isSidebarExpanded ? 'w-[200px]' : 'w-[68px]',
+          isSidebarExpanded ? 'w-[250px]' : 'w-[68px]',
           'border-r transition-all duration-300 ease-in-out transform hidden sm:flex h-full bg-accent',
         )}
       >
         <aside className="flex h-full flex-col w-full break-words px-4 overflow-x-hidden columns-1">
           {/* Top */}
           <div className="mt-4 relative pb-2">
-            <div className="flex flex-col space-y-1">
+            <div className="flex flex-col space-y-8">
               {navItems.map((item, idx) => {
                 if (item.position === 'top') {
                   return (

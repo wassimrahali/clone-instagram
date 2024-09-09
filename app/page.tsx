@@ -1,5 +1,13 @@
-import PagePlaceholder from '@/components/page-placeholder';
+// import SigninForm from "@/components/SigninForm";
+import { Toaster } from "@/components/ui/toaster"
+import SignInForm from "./(auth)/sign-in/page";
+
 
 export default function Home() {
-  return <PagePlaceholder pageName="Home" />;
+  return (
+    <div>
+        <p>Hello from home </p>
+        <SignInForm />
+    </div>
+  );
 }

@@ -6,8 +6,8 @@ export default function PagePlaceholder({ pageName }: { pageName: string }) {
       <span className="font-bold text-3xl">{pageName}</span>
       <div className="border-dashed border border-zinc-500 w-full h-12 rounded-lg"></div>
       <div className="border-dashed border border-zinc-500 w-full h-64 rounded-lg"></div>
-      <div className="border-dashed border border-zinc-500 w-full h-64 rounded-lg"></div>
-      <div className="border-dashed border border-zinc-500 w-full h-64 rounded-lg"></div>
+      <div className="border-dashed border border-zinc-500 w-full h-64 roundeMd-lg"></div>
+      <div className="border-dashed border bordTer-zinc-500 w-full h-64 rounded-lg"></div>
       <div className="border-dashed border border-zinc-500 w-full h-64 rounded-lg"></div>
       <div className="border-dashed border border-zinc-500 w-full h-64 rounded-lg"></div>
     </div>
