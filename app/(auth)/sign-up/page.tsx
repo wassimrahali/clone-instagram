@@ -3,7 +3,6 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
-import { ToastAction } from "@/components/ui/toast";
 import {
   Form,
   FormControl,
@@ -19,13 +18,16 @@ import { SignupValidation } from "@/lib/validation";
 import { useCreateUserAccount } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { createUserAccount, signInAccount } from "@/lib/appwrite/api";
+import { signInAccount } from "@/lib/appwrite/api";
+import Loader from "@/components/shared/Loader";
+import { useState } from "react";
 
 const SignupForm = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false); // State to track loading status
 
-  const { checkAuthUser,isLoading:isCreatingAccount } = useUserContext();
-  const { mutateAsync: createUserAccount, isPending } = useCreateUserAccount();
+  const { checkAuthUser } = useUserContext();
+  const { mutateAsync: createUserAccount } = useCreateUserAccount();
 
   const { toast } = useToast();
 
@@ -40,11 +42,16 @@ const SignupForm = () => {
   });
 
   const handleSignup = async (user: z.infer<typeof SignupValidation>) => {
+    setLoading(true); // Start loading
+
+    try {
       const newUser = await createUserAccount(user);
 
       if (newUser) {
         toast({
-          title: "Signup Error"
+          title: "Signup Error",
+          description: "There was an error creating your account. Please try again.",
+          variant: "destructive", // Or any other variant you use
         });
         return;
       }
@@ -56,7 +63,9 @@ const SignupForm = () => {
 
       if (!session) {
         toast({
-          title: "Signin Error"
+          title: "Signin Error",
+          description: "There was an error signing in. Please check your credentials and try again.",
+          variant: "destructive", // Or any other variant you use
         });
         return;
       }
@@ -68,9 +77,19 @@ const SignupForm = () => {
       } else {
         toast({
           title: "Signin Failed",
+          description: "Failed to authenticate. Please try again.",
+          variant: "destructive", // Or any other variant you use
         });
       }
-   
+    } catch (error) {
+      toast({
+        title: "An unexpected error occurred",
+        description: "Please try again later.",
+        variant: "destructive", // Or any other variant you use
+      });
+    } finally {
+      setLoading(false); // Stop loading
+    }
   };
 
   return (
@@ -150,12 +169,19 @@ const SignupForm = () => {
               )}
             />
 
-            <Button type="submit" className="bg-purple-800">
-            {isPending || isCreatingAccount ? (
-                <div className="flex-center gap-2">Loading...</div>
+            <Button
+              type="submit"
+              className="shad-button_primary"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <Loader />
+                </>
               ) : (
-                "Log in"
-              )}            </Button>
+                "Signup"
+              )}
+            </Button>
 
             <p className="text-sm text-light-2 text-center mt-2">
               Already have an account?

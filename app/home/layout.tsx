@@ -1,6 +1,6 @@
 import ContextProvider from '@/components/context-provider';
 import SideNav from '@/components/side-nav';
-import React, { Children } from 'react'
+import React from 'react'
 import Header from '../header';
 
 export default function HomeLayout({

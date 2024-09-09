@@ -4,7 +4,7 @@ const BottomBar = () => {
   return (
 
 
-<div className="block md:hidden fixed bottom-0 z-50 w-full -translate-x-1/2 bg-slate-900 rounded-t-2xl   border-t border-gray-200 left-1/2 dark:bg-gray-700 dark:border-gray-600">
+<div className="block md:hidden fixed bottom-0 z-50 w-full -translate-x-1/2 bg-neutral-200 rounded-t-2xl   border-t border-gray-200 left-1/2 dark:bg-gray-700 dark:border-gray-600">
 
     <div className="grid h-full max-w-lg grid-cols-5 mx-auto ">
         <button data-tooltip-target="tooltip-home" type="button" className="inline-flex flex-col items-center justify-center p-4 dark:hover:bg-gray-800 group">

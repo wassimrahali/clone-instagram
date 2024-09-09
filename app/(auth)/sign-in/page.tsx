@@ -1,10 +1,18 @@
 "use client";
 
 import * as z from "zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -13,8 +21,10 @@ import { useSignInAccount } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { checkActiveSession, deleteSessions } from "@/lib/appwrite/api"; // Ensure these functions are properly imported
+import Loader from "@/components/shared/Loader";
 
 const SignInForm = () => {
+  const [loading, setLoading] = useState(false); // State to track loading status
   const router = useRouter();
   const { checkAuthUser } = useUserContext();
   const { mutateAsync: signInAccount } = useSignInAccount();
@@ -28,36 +38,46 @@ const SignInForm = () => {
     },
   });
 
+
   const handleSignIn = async (user: z.infer<typeof SignInValidation>) => {
-    try {
-      // Check for an active session and delete it if exists
-      const activeSession = await checkActiveSession();
-      if (activeSession) {
-        await deleteSessions();
-      }
+    setLoading(true); // Start loading
 
-      // Proceed with sign-in
-      const session = await signInAccount({
-        email: user.email,
-        password: user.password,
-      });
+      try {
+        // Check for an active session and delete it if it exists
+        const activeSession = await checkActiveSession();
+        if (activeSession) {
+          await deleteSessions();
+        }
 
-      if (!session) {
-        toast({ title: "Login failed. Please try again." });
-        return;
-      }
+        // Proceed with sign-in
+        const session = await signInAccount({
+          email: user.email,
+          password: user.password,
+        });
 
-      const isLoggedIn = await checkAuthUser();
-      if (isLoggedIn) {
-        form.reset();
-        router.push("/home"); // Redirect to home page on successful login
-      } else {
-        toast({ title: "Signin Failed" });
+        if (!session) {
+          toast({ title: "Login failed. Please try again." });
+          return;
+        }
+
+        const isLoggedIn = await checkAuthUser();
+        if (isLoggedIn) {
+          form.reset();
+
+          // Show success toast
+          toast({ title: "Sign in successful!", description: "You are now logged in." });
+
+          // Redirect to home page on successful login
+          router.push("/home");
+        } else {
+          toast({ title: "Signin Failed" });
+        }
+      } catch (error) {
+        console.error("Sign-in error:", error);
+        toast({ title: "An error occurred. Please try again." });
+      } finally {
+        setLoading(false); // Stop loading when done
       }
-    } catch (error) {
-      console.error("Sign-in error:", error);
-      toast({ title: "An error occurred. Please try again." });
-    }
   };
 
   return (
@@ -65,10 +85,17 @@ const SignInForm = () => {
       <Form {...form}>
         <div className="sm:w-420 flex-center flex-col">
           <img src="/assets/images/logo.svg" alt="logo" />
-          <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">Sign in to your account</h2>
-          <p className="text-light-3 small-medium md:base-regular mt-2">To use snapgram, please enter your details</p>
+          <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
+            Sign in to your account
+          </h2>
+          <p className="text-light-3 small-medium md:base-regular mt-2">
+            To use snapgram, please enter your details
+          </p>
 
-          <form onSubmit={form.handleSubmit(handleSignIn)} className="flex flex-col gap-5 w-full mt-4">
+          <form
+            onSubmit={form.handleSubmit(handleSignIn)}
+            className="flex flex-col gap-5 w-full mt-4"
+          >
             <FormField
               control={form.control}
               name="email"
@@ -97,11 +124,26 @@ const SignInForm = () => {
               )}
             />
 
-            <Button type="submit" className="shad-button_primary">Log in</Button>
+            <Button
+              type="submit"
+              className="shad-button_primary"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                 <Loader />
+                </>
+              ) : (
+                "Log in"
+              )}
+            </Button>
 
             <p className="text-small-regular text-light-2 text-center mt-2">
-              I don't have an account!
-              <Link href="/sign-up" className="text-red-400 text-small-semibold ml-1">
+              I dont have an account!
+              <Link
+                href="/sign-up"
+                className="text-red-400 text-small-semibold ml-1"
+              >
                 Sign up
               </Link>
             </p>
