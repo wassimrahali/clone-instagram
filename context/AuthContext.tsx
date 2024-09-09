@@ -60,7 +60,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
   
   useEffect(() => {
+    
     const checkUser = async () => {
+
       const isAuthenticated = await checkAuthUser();
       if (!isAuthenticated) {
         router.push('/sign-in');

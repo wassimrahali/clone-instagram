@@ -60,7 +60,10 @@ export async function signInAccount(user: { email: string; password: string }) {
       user.email,
       user.password
     );
+    console.log(session);
+
     return session;
+
   } catch (error) {
     console.log(error);
     throw error; // Re-throw the error to propagate it

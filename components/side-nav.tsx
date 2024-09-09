@@ -12,12 +12,14 @@ import {
 } from '@/components/ui/tooltip';
 import { NavItems } from '@/config';
 import { cn } from '@/lib/utils';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-
+import { ChevronLeft, ChevronRight, InstagramIcon } from 'lucide-react';
+import { useUserContext } from '@/context/AuthContext';
 import { ThemeToggle } from './theme-toggle';
+import { Avatar, AvatarImage } from './ui/avatar';
 
 export default function SideNav() {
   const navItems = NavItems();
+  const { user } = useUserContext();
 
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -54,6 +56,19 @@ export default function SideNav() {
         <aside className="flex h-full flex-col w-full break-words px-4 overflow-x-hidden columns-1">
           {/* Top */}
           <div className="mt-4 relative pb-2">
+            <span className='flex  items-center space-x-4'>
+<InstagramIcon /><span>Instagram</span>
+</span>
+
+<div>
+{user.name}
+      <Avatar>
+                <AvatarImage
+                  src={user.imageUrl}
+                  alt="@shadcn"
+                />
+                </Avatar>
+</div>
             <div className="flex flex-col space-y-8">
               {navItems.map((item, idx) => {
                 if (item.position === 'top') {

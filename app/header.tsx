@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { NavItems } from '@/config';
-import { Instagram, InstagramIcon, Menu, User } from 'lucide-react';
+import { Heart, Instagram, InstagramIcon, LinkedinIcon, Menu, User } from 'lucide-react';
 import BottomBar from '@/components/shared/BottomBar';
 import { useUserContext } from '@/context/AuthContext';
 import { useSignOutAccount } from '@/lib/react-query/queriesAndMutations';
@@ -80,7 +80,7 @@ export default function Header() {
         </DropdownMenu>
 
         <button onClick={() => setIsOpen(true)} className="block sm:hidden">
-          <Menu size={24} />
+          <Heart size={24} />
         </button>
 
         <Sheet open={isOpen} onOpenChange={setIsOpen}>

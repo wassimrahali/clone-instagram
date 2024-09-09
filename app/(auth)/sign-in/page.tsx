@@ -38,46 +38,40 @@ const SignInForm = () => {
     },
   });
 
-
   const handleSignIn = async (user: z.infer<typeof SignInValidation>) => {
     setLoading(true); // Start loading
 
-      try {
-        // Check for an active session and delete it if it exists
-        const activeSession = await checkActiveSession();
-        if (activeSession) {
-          await deleteSessions();
-        }
-
-        // Proceed with sign-in
-        const session = await signInAccount({
-          email: user.email,
-          password: user.password,
-        });
-
-        if (!session) {
-          toast({ title: "Login failed. Please try again." });
-          return;
-        }
-
-        const isLoggedIn = await checkAuthUser();
-        if (isLoggedIn) {
-          form.reset();
-
-          // Show success toast
-          toast({ title: "Sign in successful!", description: "You are now logged in." });
-
-          // Redirect to home page on successful login
-          router.push("/home");
-        } else {
-          toast({ title: "Signin Failed" });
-        }
-      } catch (error) {
-        console.error("Sign-in error:", error);
-        toast({ title: "An error occurred. Please try again." });
-      } finally {
-        setLoading(false); // Stop loading when done
+    try {
+      // Check for an active session and delete it if it exists
+      const activeSession = await checkActiveSession();
+      if (activeSession) {
+        await deleteSessions();
       }
+
+      // Proceed with sign-in
+      const session = await signInAccount({
+        email: user.email,
+        password: user.password,
+      });
+
+      if (!session) {
+        toast({ title: "Login failed. Please try again." });
+        return;
+      }
+
+      const isLoggedIn = await checkAuthUser();
+      if (isLoggedIn) {
+        form.reset();
+        router.push("/home");
+      }
+    } catch (error) {
+      console.error("Sign-in error:", error);
+      toast({ title: "An error occurred. Please try again." });
+    } finally {
+      setLoading(false); // Stop loading when done
+    }
+
+    // console.log(user)
   };
 
   return (
@@ -131,7 +125,7 @@ const SignInForm = () => {
             >
               {loading ? (
                 <>
-                 <Loader />
+                  <Loader />
                 </>
               ) : (
                 "Log in"

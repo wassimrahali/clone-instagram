@@ -1,5 +1,5 @@
 import { usePathname } from 'next/navigation';
-import { Bell, Bookmark, Briefcase, Home, ImagePlusIcon, Podcast, Settings, User, Users } from 'lucide-react';
+import { Bell, Bookmark, Briefcase, CircleFadingPlus, Home, ImagePlusIcon, Settings, User, Users } from 'lucide-react';
 
 export const NavItems = () => {
   const pathname = usePathname();
@@ -67,3 +67,37 @@ export const NavItems = () => {
     },
   ];
 };
+
+
+export const smallNavItemsDevices = [
+  {
+    name: "Home",
+    href: "/home",
+    icon: <Home size={20} />,
+    tooltip: "Home",
+  },
+  {
+    name: "Create Post",
+    href: "/create-post",
+    icon: <CircleFadingPlus size={20} />,
+    tooltip: "New post",
+  },
+  {
+    name: "Saved",
+    href: "/saved",
+    icon: <Bookmark size={20} />,
+    tooltip: "Bookmark",
+  },
+  {
+    name: "Explore",
+    href: "/explore",
+    icon: <Bell size={20} />,
+    tooltip: "Explore",
+  },
+  {
+    name: "Profile",
+    href: "/profile",
+    icon: <User size={20} />,
+    tooltip: "Profile",
+  },
+];
