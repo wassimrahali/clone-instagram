@@ -119,10 +119,6 @@ export const checkActiveSession = async (): Promise<boolean> => {
     const session = await account.getSession('current'); // Get the current session
     return session !== null; // Return true if there is an active session
   } catch (error: unknown) {
-    if (error instanceof Error && (error as any).code === 401) {
-      return false; // No active session
-    }
-    // Log and re-throw other unexpected errors
     console.error('Error checking session:', error);
     throw error;
   }

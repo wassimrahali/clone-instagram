@@ -40,18 +40,18 @@ export default function Header() {
     
  
     <div>
-         <header className="flex items-center h-16 px-4 border-b shrink-0 md:px-6 justify-between">
-
+    <header className="md:hidden flex items-center h-16 px-4 border-b shrink-0 md:px-6 justify-between">
       <Link
         href="#"
         className="flex items-center gap-2 text-lg font-semibold md:text-base"
         prefetch={false}
       >
-<span className='flex  items-center space-x-4'>
-<InstagramIcon /><span>Instagram</span>
-</span>
+        <span className="flex items-center space-x-4">
+          <InstagramIcon />
+          <span>Instagram</span>
+        </span>
       </Link>
-
+  
       <div className="ml-4 flex items-center gap-3">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -61,11 +61,10 @@ export default function Header() {
               className="overflow-hidden rounded-full"
             >
               <Avatar>
-                <AvatarImage
-                  src={user.imageUrl}
-                  alt="@shadcn"
-                />
-                <AvatarFallback><User /></AvatarFallback>
+                <AvatarImage src={user.imageUrl} alt="@shadcn" />
+                <AvatarFallback>
+                  <User />
+                </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
@@ -75,17 +74,23 @@ export default function Header() {
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuItem>Support</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className='cursor-pointer hover:text-red-600' onClick={() => signOut()} >Logout</DropdownMenuItem>
+            <DropdownMenuItem
+              className="cursor-pointer hover:text-red-600"
+              onClick={() => signOut()}
+            >
+              Logout
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-
+  
+        {/* Visible only on small screens */}
         <button onClick={() => setIsOpen(true)} className="block sm:hidden">
           <Heart size={24} />
         </button>
-
+  
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetContent side="right" className='block md:hidden'>
-            <div className="pt-4  overflow-y-auto h-fit w-full flex flex-col gap-1">
+          <SheetContent side="right" className="block md:hidden">
+            <div className="pt-4 overflow-y-auto h-fit w-full flex flex-col gap-1">
               {navItems.map((navItem, idx) => (
                 <Link
                   key={idx}
@@ -109,6 +114,7 @@ export default function Header() {
       </div>
     <BottomBar />
     </header>
-    </div>
+  </div>
+  
   );
 }

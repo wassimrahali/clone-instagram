@@ -51,13 +51,7 @@ export const NavItems = () => {
       active: isNavItemActive(pathname, '/explore'),
       position: 'top',
     },
-    {
-      name: 'Projects',
-      href: '/projects',
-      icon: <Briefcase size={20} />,
-      active: isNavItemActive(pathname, '/projects'),
-      position: 'top',
-    },
+ 
     {
       name: 'Settings',
       href: '/settings',
