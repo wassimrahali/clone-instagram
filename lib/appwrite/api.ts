@@ -1,7 +1,6 @@
 import { INewUser } from "@/types";
 import { ID } from "appwrite";
 import { account, appwriteConfig, avatars, databases } from "./appwriteConfig";
-import { URL } from "url";
 import { Query } from 'appwrite'; // Ensure Query is correctly imported
 
 export async function createUserAccount(user: INewUser) {
@@ -16,8 +15,8 @@ export async function createUserAccount(user: INewUser) {
 
     if (!newAccount) throw new Error("Failed to create account");
 
-    // Generate avatar URL from initials
-    const avatarUrl = avatars.getInitials(user.name);
+    // Generate avatar URL from initials (assuming this returns a URL string)
+    const avatarUrl = avatars.getInitials(user.name).toString();
 
     // Save the new user to the database
     const newUser = await saveUserToDB({
@@ -25,12 +24,13 @@ export async function createUserAccount(user: INewUser) {
       name: newAccount.name,
       email: newAccount.email,
       username: user.username,
-      imageUrl: avatarUrl,
+      imageUrl: avatarUrl, // Changed to string type
     });
 
     return newUser;
   } catch (error) {
-    return error;
+    console.error("Error creating user account:", error);
+    throw error; // Re-throw for consistent error handling
   }
 }
 
@@ -38,7 +38,7 @@ export async function saveUserToDB(user: {
   accountId: string;
   email: string;
   name: string;
-  imageUrl: URL;
+  imageUrl: string; // Changed to string
   username?: string;
 }) {
   try {
@@ -50,6 +50,7 @@ export async function saveUserToDB(user: {
     );
     return newUser;
   } catch (error) {
+    console.error("Error saving user to DB:", error);
     throw error; // Re-throw the error to be handled upstream
   }
 }
@@ -61,32 +62,28 @@ export async function signInAccount(user: { email: string; password: string }) {
       user.password
     );
     console.log(session);
-
     return session;
-
   } catch (error) {
-    console.log(error);
+    console.error("Error signing in:", error);
     throw error; // Re-throw the error to propagate it
   }
 }
-
 
 export async function signOutAccount() {
   try {
     const session = await account.deleteSession("current");
     return session;
   } catch (error) {
-    console.log(error);
+    console.error("Error signing out:", error);
     throw error; // Re-throw the error to propagate it
   }
 }
-
 
 export async function getCurrentUser() {
   try {
     // Fetch the current account
     const currentAccount = await account.get();
-    
+
     // If no account is found, throw an error
     if (!currentAccount) throw new Error("No current account found");
 
@@ -106,21 +103,19 @@ export async function getCurrentUser() {
     return currentUser.documents[0];
     
   } catch (error) {
-    console.log(error);
-    // Optionally re-throw the error or return null/undefined if needed
-    throw error;
+    console.error("Error fetching current user:", error);
+    throw error; // Optionally re-throw the error or return null/undefined if needed
   }
 }
-
 
 // Function to check if there is an active session
 export const checkActiveSession = async (): Promise<boolean> => {
   try {
     const session = await account.getSession('current'); // Get the current session
     return session !== null; // Return true if there is an active session
-  } catch (error: unknown) {
+  } catch (error) {
     console.error('Error checking session:', error);
-    throw error;
+    return false; // Return false if no active session
   }
 };
 
@@ -143,7 +138,7 @@ export const deleteSessions = async (): Promise<void> => {
     );
 
     console.log('All sessions deleted successfully');
-  } catch (error: unknown) {
+  } catch (error) {
     console.error('Error deleting sessions:', error);
     throw error; // Re-throw the error for further handling
   }
