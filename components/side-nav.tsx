@@ -26,13 +26,26 @@ import {
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import Loader from "./shared/Loader";
+import Logo from "@/icons/logo";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "./ui/alert-dialog"; // Import AlertDialog components
 
 export default function SideNav() {
   const { user } = useUserContext();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // State for dialog
   const { mutateAsync: signOut, isSuccess } = useSignOutAccount();
-  
+
   const handleSignOut = async () => {
     setIsLoading(true);
     try {
@@ -79,8 +92,8 @@ export default function SideNav() {
       >
         <aside className="flex h-full flex-col w-full break-words px-4 overflow-x-hidden columns-1">
           {/* Logo Section */}
-          <div className="flex items-center my-8 mx-5">
-            {/* <Image src={instagram} alt="Logo Instagram" /> */}
+          <div className="flex items-center my-8 mx-5 font-medium">
+            <h2>Logo</h2>
           </div>
 
           {/* Nav Items */}
@@ -147,7 +160,7 @@ export default function SideNav() {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       className={`cursor-pointer ${isLoading ? 'text-gray-500' : 'hover:text-red-600'}`}
-                      onClick={handleSignOut}
+                      onClick={() => setIsDialogOpen(true)} // Open dialog on click
                       disabled={isLoading}
                     >
                       {isLoading ? <Loader /> : 'Logout'}
@@ -178,6 +191,33 @@ export default function SideNav() {
           </button>
         </div>
       </div>
+
+      {/* Alert Dialog */}
+      <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <AlertDialogTrigger asChild>
+          {/* Trigger button can be hidden or used elsewhere */}
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              You will be logged out!
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setIsDialogOpen(false)}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={async () => {
+                await handleSignOut();
+                setIsDialogOpen(false);
+              }}
+              disabled={isLoading}
+            >
+              {isLoading ? <Loader /> : 'Continue'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
