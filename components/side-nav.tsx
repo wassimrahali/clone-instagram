@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 import { NavItems } from "@/config";
 import { cn } from "@/lib/utils";
-import { ChevronLeft, ChevronRight, User } from "lucide-react";
+import { ChevronLeft, ChevronRight, InstagramIcon, User } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useUserContext } from "@/context/AuthContext";
@@ -26,7 +26,6 @@ import {
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import Loader from "./shared/Loader";
-import Logo from "@/icons/logo";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -93,8 +92,12 @@ export default function SideNav() {
         <aside className="flex h-full flex-col w-full break-words px-4 overflow-x-hidden columns-1">
           {/* Logo Section */}
           <div className="flex items-center my-8 mx-5 font-medium">
-            <h2>Logo</h2>
+          <div className="mt-1 relative pb-2">
+            <div className="flex flex-col space-y-8">
+              <h1>Logo</h1>
+            </div>
           </div>
+                    </div>
 
           {/* Nav Items */}
           <div className="mt-6 relative pb-2">

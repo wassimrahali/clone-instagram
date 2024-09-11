@@ -22,6 +22,12 @@ import { useUserContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { checkActiveSession, deleteSessions } from "@/lib/appwrite/api"; // Ensure these functions are properly imported
 import Loader from "@/components/shared/Loader";
+import Image from "next/image";
+import sideImg from "../../../public/assets/images/img.jpg";
+import {
+  IconBrandGithub,
+  IconBrandGoogle,
+} from "@tabler/icons-react";
 
 const SignInForm = () => {
   const [loading, setLoading] = useState(false); // State to track loading status
@@ -70,34 +76,43 @@ const SignInForm = () => {
     } finally {
       setLoading(false); // Stop loading when done
     }
-
-    // console.log(user)
   };
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-white shadow-lg rounded-md">
-      <Form {...form}>
-        <div className="sm:w-420 flex-center flex-col">
-          <img src="/assets/images/logo.svg" alt="logo" />
-          <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
-            Sign in to your account
-          </h2>
-          <p className="text-light-3 small-medium md:base-regular mt-2">
-            To use snapgram, please enter your details
-          </p>
+    <div className="flex flex-row">
+      <div className="hidden md:block flex-shrink-0">
+        <Image
+          className="h-full w-[600px] object-cover"
+          src={sideImg}
+          alt="Sign-in Side Image"
+        />
+      </div>
+      <div className="flex-1 max-w-md w-full mx-auto mb-96 rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
+        <h2 className="font-bold text-xl text-neutral-800 text-center md:text-left dark:text-neutral-200">
+          Welcome Back to Instap
+        </h2>
+        <p className="text-neutral-600 text-sm max-w-sm mt-2 text-center md:text-left dark:text-neutral-300">
+          Sign in to your account and continue where you left off.
+        </p>
 
-          <form
-            onSubmit={form.handleSubmit(handleSignIn)}
-            className="flex flex-col gap-5 w-full mt-4"
-          >
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSignIn)} className="my-8">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="shad-form_label">Email</FormLabel>
+                <FormItem className="mb-4">
+                  <FormLabel className="shad-form_label">
+                    Email Address
+                  </FormLabel>
                   <FormControl>
-                    <Input type="text" className="shad-input" {...field} />
+                    <Input
+                      id="email"
+                      placeholder="youremail@example.com"
+                      type="email"
+                      className="shad-input"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -108,10 +123,16 @@ const SignInForm = () => {
               control={form.control}
               name="password"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="mb-8">
                   <FormLabel className="shad-form_label">Password</FormLabel>
                   <FormControl>
-                    <Input type="password" className="shad-input" {...field} />
+                    <Input
+                      id="password"
+                      placeholder="••••••••"
+                      type="password"
+                      className="shad-input"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -120,7 +141,7 @@ const SignInForm = () => {
 
             <Button
               type="submit"
-              className="shad-button_primary"
+              className="bg-gradient-to-br relative group/btn from-cyan-900 dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
               disabled={loading}
             >
               {loading ? (
@@ -128,23 +149,59 @@ const SignInForm = () => {
                   <Loader />
                 </>
               ) : (
-                "Log in"
+                "Sign in"
               )}
+              <BottomGradient />
             </Button>
 
-            <p className="text-small-regular text-light-2 text-center mt-2">
-              I dont have an account!
-              <Link
-                href="/sign-up"
-                className="text-red-400 text-small-semibold ml-1"
+            <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
+
+            <div className="flex flex-col space-y-4">
+              <button
+                className="relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
+                type="button"
               >
-                Sign up
-              </Link>
-            </p>
+                <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+                <span className="text-neutral-700 dark:text-neutral-300 text-sm">
+                  Sign in with GitHub
+                </span>
+                <BottomGradient />
+              </button>
+              <button
+                className="relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
+                type="button"
+              >
+                <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+                <span className="text-neutral-700 dark:text-neutral-300 text-sm">
+                  Sign in with Google
+                </span>
+                <BottomGradient />
+              </button>
+              <button
+                className="relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
+                type="button"
+              >
+                <span className="text-neutral-700 dark:text-neutral-300 text-sm">
+                  <Link href="/sign-up" className="text-small-semibold ml-1">
+                    I dont have an account{" "}
+                    <span className="text-blue-700">sign up</span>
+                  </Link>
+                </span>
+              </button>
+            </div>
           </form>
-        </div>
-      </Form>
+        </Form>
+      </div>
     </div>
+  );
+};
+
+const BottomGradient = () => {
+  return (
+    <>
+      <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
+      <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+    </>
   );
 };
 

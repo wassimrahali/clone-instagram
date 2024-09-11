@@ -6,8 +6,10 @@ import SignInForm from "./(auth)/sign-in/page";
 export default function Home() {
   return (
     <div>
+
         <p>Hello from home </p>
         <SignInForm />
+        
     </div>
   );
 }

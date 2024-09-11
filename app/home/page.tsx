@@ -1,10 +1,8 @@
-import React from 'react'
+import PagePlaceholder from "@/components/page-placeholder";
+import React from "react";
 
 const HomeUser = () => {
+  return <PagePlaceholder pageName={"Home"} />;
+};
 
-  return (
-    <div>Home tw</div>
-  )
-}
-
-export default HomeUser
+export default HomeUser;
